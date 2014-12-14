@@ -39,16 +39,17 @@ queue()
     .await(ready);
 
 function ready(error, us) {
-  svg.append("path")
-      .datum(topojson.feature(us, us.objects.cbsa))
-      .attr("class", "cbsa")
-      .attr("d", path)
-      .text(function(d) { return d.properties.id + " " + d.properties.name; });
+  //svg.append("path")
+  //    .datum(topojson.feature(us, us.objects.cbsa))
+  //    .attr("class", "cbsa")
+  //    .attr("d", path)
+  //    .text(function(d) { return d.properties.id + " " + d.properties.name; });
       
   svg.append("path")
       .datum(topojson.feature(us, us.objects.state))
       .attr("class", "state")
-      .attr("d", path);
+      .attr("d", path)
+      .text(function(d) { return d.properties.id + " " + d.properties.name; });
 }
 
 d3.select(self.frameElement).style("height", height + "px");
