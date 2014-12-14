@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<style>
 
+.cbsa {
+  fill: none;
+}
+
+.state {
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: round;
+}
+
+</style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
@@ -8,18 +20,35 @@
 <script>
 
 var width = 960,
-    height = 1160;
+    height = 600;
+
+var projection = d3.geo.albersUsa()
+    .scale(1280)
+    .translate([width / 2, height / 2]);
+
+var path = d3.geo.path()
+    .projection(projection);
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("cbsa2.json", function(error, us) {
-  if (error) return console.error(error);
+queue()
+    .defer(d3.json, "usgeo.json")
+    .await(ready);
+
+function ready(error, us) {
+  svg.append("g")
+      .attr("class", "cbsa")
+    .selectAll("path")
+      .data(topojson.feature(us, us.objects.cbsa).features)
 
   svg.append("path")
-      .datum(topojson.feature(us, us.objects.cbsa))
-      .attr("d", d3.geo.path().projection(d3.geo.mercator()));
-});
+      .datum(topojson.mesh(us, us.objects.state, function(a, b) { return a !== b; }))
+      .attr("class", "state")
+      .attr("d", path);
+}
+
+d3.select(self.frameElement).style("height", height + "px");
 
 </script>
