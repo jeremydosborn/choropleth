@@ -3,7 +3,8 @@
 <style>
 
 .cbsa {
-
+  file: none;
+  stroke: red;
 }
 
 .state {
@@ -38,13 +39,13 @@ queue()
     .await(ready);
 
 function ready(error, us) {
-  svg.append("g")
-      .attr("class", "cbsa")
-    .selectAll("path")
-      .data(topojson.feature(us, us.objects.cbsa).features)
-
   svg.append("path")
-      .datum(topojson.mesh(us, us.objects.state, function(a, b) { return a !== b; }))
+      .datum(topojson.feature(us, us.objects.cbsa))
+      .attr("class", "cbsa")
+      .attr("d", path);
+      
+  svg.append("path")
+      .datum(topojson.feature(us, us.objects.state))
       .attr("class", "state")
       .attr("d", path);
 }
