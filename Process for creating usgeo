@@ -1,0 +1,18 @@
+# install gdal, node.js, npm, and topojson
+sudo apt-get install gdal-bin
+curl -sL https://deb.nodesource.com/setup | sudo bash -
+sudo apt-get install nodejs npm
+sudo npm install -g topojson
+
+# download cbsa and state shapes from census.gov
+mkdir usgeo
+cd usgeo
+wget 'http://www2.census.gov/geo/tiger/TIGER2014/CBSA/tl_2014_us_cbsa.zip'
+wget 'http://www2.census.gov/geo/tiger/TIGER2014/STATE/tl_2014_us_state.zip'
+unzip tl_2014_us_cbsa.zip
+unzip tl_2014_us_state.zip
+
+# use gdal to convert into a geojson file and then into a topojson file
+ogr2ogr -f GeoJSON cbsa.json tl_2014_us_cbsa.shp
+ogr2ogr -f GeoJSON state.json tl_2014_us_state.shp
+topojson --id-property GEOID --properties name=NAME -- state.json cbsa.json > usgeo.json
