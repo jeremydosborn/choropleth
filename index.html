@@ -35,7 +35,7 @@ var width = 960,
 var incomeById = d3.map();
 
 var quantize = d3.scale.quantize()
-    .domain([10000, 100000])
+    .domain([30000, 90000])
     .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
 
 var projection = d3.geo.albersUsa()
